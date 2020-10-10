@@ -1,8 +1,8 @@
 const lecture = document.querySelector(".lecture");
 const video = document.querySelector("video");
 
-video.videoWidth = lecture.clientWidth;
-video.videoHeight = lecture.clientHeight;
+video.width = lecture.clientWidth;
+video.height = lecture.clientHeight;
 
 const cameraOptions = document.querySelector(".video-options>select");
 const buttons = [...document.querySelectorAll("button")];
