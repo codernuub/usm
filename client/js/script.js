@@ -1,35 +1,27 @@
-
+window.onload = function () {
+  const lecture = document.querySelector('.lecture');
+  const video = document.querySelector('video');
+  video.videoWidth = lecture.clientWidth;
+  video.videoHeight = lecture.clientHeight
+}
 const cameraOptions = document.querySelector('.video-options>select');
-const video = document.querySelector('video');
 const buttons = [...document.querySelectorAll('button')];
 let streamStarted = false;
 
 const [play, pause, stop] = buttons;
 
-const constraints = {
-  video: {
-    width: {
-      min: 1280,
-      ideal: 1920,
-      max: 2560,
-    },
-    height: {
-      min: 720,
-      ideal: 1080,
-      max: 1440
-    },
+const videoConfig = {
+  width: {
+    min: 1280,
+    ideal: 1920,
+    max: 2560,
+  },
+  height: {
+    min: 720,
+    ideal: 1080,
+    max: 1440
   }
-};
-
-//get all video input source
-const getCameraSelection = async () => {
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  const videoDevices = devices.filter(device => device.kind === 'videoinput');
-  const options = videoDevices.map(videoDevice => {
-    return `<option value="${videoDevice.deviceId}">${videoDevice.label}</option>`;
-  });
-  cameraOptions.innerHTML = options.join('');
-};
+}
 
 play.onclick = () => {
   if (streamStarted) {
@@ -38,13 +30,13 @@ play.onclick = () => {
   }
   if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
     consoleOnDom('msg', `requesting ${cameraOptions.value}`)
-    const updatedConstraints = {
-      ...constraints,
-      deviceId: {
-        exact: cameraOptions.value
+    const constraints = {
+      video: {
+        ...videoConfig,
+        facingMode: 'environment'
       }
     };
-    startStream(updatedConstraints);
+    startStream(constraints);
   }
 };
 
@@ -65,25 +57,22 @@ const handleStream = (stream, requestedDeviceChange) => {
   streamStarted = true;
 };
 
-getCameraSelection();
-
-
 //camera change
 cameraOptions.onchange = () => {
   try {
     /*stop current camera stream here*/
-    if(window.stream)
-    window.stream.getTracks().forEach(track => track.stop())
+    if (window.stream)
+      window.stream.getTracks().forEach(track => track.stop())
 
     /*stop current camera stream here*/
     consoleOnDom('msg', `requesting ${cameraOptions.value}`)
-    const updatedConstraints = {
-      ...constraints,
-      deviceId: {
-        exact: cameraOptions.value
+    const constraints = {
+      video: {
+        ...videoConfig,
+        facingMode: 'user'
       }
     };
-    startStream(updatedConstraints);
+    startStream(constraints);
   }
   catch (err) {
     consoleOnDom('error', err.message)
