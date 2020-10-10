@@ -25,8 +25,7 @@ function initStream() {
     .getUserMedia(conf)
     .then((stream) => {
       const video = document.querySelector("video");
-
-      video.srcObject;
+      video.srcObject = stream;
     })
     .catch((err) => consoleOnDom("error", err.message));
 
