@@ -44,7 +44,7 @@ play.onclick = () => {
         exact: cameraOptions.value
       }
     };
-    startStream(updatedConstraints, false);
+    startStream(updatedConstraints);
   }
 };
 
@@ -63,7 +63,6 @@ const handleStream = (stream, requestedDeviceChange) => {
   video.srcObject = stream;
   window.stream = stream;
   streamStarted = true;
-  if (requestedDeviceChange) video.play();
 };
 
 getCameraSelection();
@@ -73,6 +72,7 @@ getCameraSelection();
 cameraOptions.onchange = () => {
   try {
     /*stop current camera stream here*/
+    if(window.stream)
     window.stream.getTracks().forEach(track => track.stop())
 
     /*stop current camera stream here*/
@@ -83,7 +83,7 @@ cameraOptions.onchange = () => {
         exact: cameraOptions.value
       }
     };
-    startStream(updatedConstraints, true);
+    startStream(updatedConstraints);
   }
   catch (err) {
     consoleOnDom('error', err.message)
