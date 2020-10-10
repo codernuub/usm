@@ -1,9 +1,5 @@
 const lecture = document.querySelector(".lecture");
 const video = document.querySelector("video");
-
-video.width = lecture.clientWidth;
-video.height = lecture.clientHeight;
-
 const cameraOptions = document.querySelector(".video-options>select");
 const buttons = [...document.querySelectorAll("button")];
 let streamStarted = false;
