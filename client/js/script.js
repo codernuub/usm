@@ -44,7 +44,7 @@ try {
           exact: cameraOptions.value
         }
       };
-      startStream(updatedConstraints);
+      startStream(updatedConstraints, false);
     }
   };
 
@@ -56,6 +56,7 @@ try {
   //output video on video element
   const handleStream = (stream, requestedDeviceChange) => {
     video.srcObject = stream;
+    window.stream = stream;
     streamStarted = true;
     if (requestedDeviceChange) video.play();
   };
@@ -65,6 +66,9 @@ try {
 
   //camera change
   cameraOptions.onchange = () => {
+    /*stop current camera stream here*/
+    window.stream.getTracks().forEach(track => track.stop())
+    /*stop current camera stream here*/
     consoleOnDom('msg', `requesting ${cameraOptions.value}`)
     const updatedConstraints = {
       ...constraints,
