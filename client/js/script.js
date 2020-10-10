@@ -68,7 +68,7 @@ cameraOptions.onchange = () => {
     const constraints = {
       video: {
         ...videoConfig,
-        facingMode: "user",
+        facingMode:cameraOptions.value,
       },
     };
     startStream(constraints);
