@@ -33,7 +33,7 @@ play.onclick = () => {
     const constraints = {
       video: {
         ...videoConfig,
-        facingMode: "environment",
+        facingMode: cameraOptions.value,
       },
     };
     startStream(constraints);
@@ -54,6 +54,7 @@ const handleStream = (stream, requestedDeviceChange) => {
   video.srcObject = stream;
   window.stream = stream;
   streamStarted = true;
+  video.play();
 };
 
 //camera change
