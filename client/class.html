@@ -4,6 +4,8 @@
 <head>
     <!--meta tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--icon lib-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <!--css tags-->
     <link rel="stylesheet" href="css/class.css">
 
@@ -11,20 +13,39 @@
 </head>
 
 <body>
-    <div class="video-part">
-        <video autoplay></video>
-        <button onclick="initStream()">
-            start stream
-        </button>
+    <div class="lecture">
+        <div class="lecture-detail up">
+            <span>Chp1 Quantum Mechanics</span>
+        </div>
+        <!--main video part-->
+        <video></video>
+        <!--main video part-->
+        <div class="lecture-detail down">
+            <button class="play">
+            
+                    <i class="fa fa-play"></i>
+            </button>
+            <button class="pause">
+                <i class="fa fa-pause"></i>
+            </button>
+        </div>
     </div>
+
+
     <div class="console-part">
+        <div class="video-options">
+            <select name="" id="" class="custom-select">
+                <option value="">Select camera</option>
+            </select>
+        </div>
         <h2>CONSOLE</h2>
-        <div  id="console">
+        <div id="console">
 
         </div>
 
     </div>
 </body>
-<script defer src="js/stream.js"></script>
+<script defer src="js/lib.js"></script>
+<script defer src="js/script.js"></script>
 
 </html>

@@ -12,20 +12,61 @@ body {
   padding: 0;
   margin: 0;
 }
-video {
+.wrapper {
   width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+/*lecture styling*/
+.lecture {
+  width: 100%;
+  height: 40%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.lecture > video {
+  width: 100%;
+  height: 100%;
   background-color: #eee;
 }
-.video-part {
+
+.lecture > .lecture-detail {
+  width: 95%;
+  padding: 2.5%;
+  position: absolute;
+  transition: all 0.3s;
+  color: white;
+}
+.lecture > .lecture-detail:nth-child(1) > span {
+  display: inline;
+  margin: 1.5%;
+}
+.lecture > .up {
+  top: 1%;
+  transform: translateY(-100%);
+}
+.lecture > .down {
+  bottom: 1%;
+  transform: translateY(100%);
+}
+.lecture:hover > .up {
+  transform: translateY(0);
+  transition: all 0.3s;
+}
+.lecture:hover > .down {
+  transform: translateY(0);
+  transition: all 0.3s;
+}
+.lecture > .down {
   text-align: center;
 }
-button {
-  border-radius: 5px;
+.lecture > .down > button {
+  background-color: transparent;
   border: transparent;
-  padding: 2.5%;
-  background-color: royalblue;
-  color: white;
-  font-family:sans-serif;
 }
 
 /*console prt*/
