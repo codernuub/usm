@@ -1,4 +1,3 @@
-autoAdjustVideoArea()
 const lecture = document.querySelector(".lecture");
 const video = document.querySelector("video");
 const cameraOptions = document.querySelector(".video-options>select");

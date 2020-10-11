@@ -12,12 +12,6 @@ body {
   padding: 0;
   margin: 0;
 }
-.wrapper {
-  width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
-}
 
 /*lecture styling*/
 .lecture {
@@ -101,4 +95,31 @@ body {
 }
 #console > .error {
   color: rgb(230, 58, 58);
+}
+/*landscape orientation*/
+@media (orientation: landscape) {
+ .lecture {
+   width:100%;
+   height:100%;
+ }
+
+ .console-part {
+    display: none;
+ }
+}
+
+
+/*desktop view*/
+@media (min-width:900px){
+  body {
+    display: flex;
+  }
+  .lecture {
+    width:60%;
+    height:50%;
+  }
+  .console-part {
+    width:40%;
+    display:block;
+ }
 }
