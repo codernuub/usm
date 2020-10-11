@@ -6,5 +6,5 @@ function autoAdjustVideoArea() {
     lecture.insertBefore(video, lecture.lastElementChild)
 }
 
-window.addEventListener('DOMContentLoaded', () => autoAdjustVideoArea())
-window.addEventListener('orientationchange', () => autoAdjustVideoArea())
+//autoAdjustVideoArea()
+//window.addEventListener('orientationchange', () => autoAdjustVideoArea())

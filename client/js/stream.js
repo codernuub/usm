@@ -3,7 +3,7 @@ const video = document.querySelector("video");
 const cameraOptions = document.querySelector(".video-options>select");
 const buttons = [...document.querySelectorAll("button")];
 let streamStarted = false;
-
+console.log(video)
 const [play, pause, stop] = buttons;
 
 const videoConfig = {
