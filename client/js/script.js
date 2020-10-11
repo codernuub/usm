@@ -41,16 +41,16 @@ play.onclick = () => {
 };
 
 //get requested media
-const startStream = async (constraints, requestedDeviceChange) => {
+const startStream = async (constraints) => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleStream(stream, requestedDeviceChange);
+    handleStream(stream);
   } catch (err) {
     consoleOnDom("error", err.message);
   }
 };
 //output video on video element
-const handleStream = (stream, requestedDeviceChange) => {
+const handleStream = (stream) => {
   video.srcObject = stream;
   window.stream = stream;
   streamStarted = true;
@@ -63,7 +63,6 @@ cameraOptions.onchange = () => {
     /*stop current camera stream here*/
     if (window.stream)
       window.stream.getTracks().forEach((track) => track.stop());
-
     /*stop current camera stream here*/
     consoleOnDom("msg", `requesting ${cameraOptions.value}`);
     const constraints = {
@@ -73,6 +72,7 @@ cameraOptions.onchange = () => {
       },
     };
     startStream(constraints);
+
   } catch (err) {
     consoleOnDom("error", err.message);
   }
@@ -82,3 +82,5 @@ cameraOptions.onchange = () => {
 const pauseStream = () => video.pause();
 
 pause.onclick = pauseStream;
+
+console.log(doc);
