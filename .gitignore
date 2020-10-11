@@ -1,5 +1,6 @@
 node_modules/
 routes/
+video/
 server.js
 package.json
 package-lock.json

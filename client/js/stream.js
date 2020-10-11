@@ -1,3 +1,5 @@
+window.onload = () => autoAdjustVideoArea()
+
 const lecture = document.querySelector(".lecture");
 const video = document.querySelector("video");
 const cameraOptions = document.querySelector(".video-options>select");
@@ -20,12 +22,12 @@ const videoConfig = {
 };
 
 play.onclick = () => {
-  if (streamStarted) {
+if (streamStarted) {
     video.play();
     return;
   }
   if ("mediaDevices" in navigator && navigator.mediaDevices.getUserMedia) {
-    consoleOnDom("msg", `requesting ${cameraOptions.value}`);
+    doc.log(`requesting ${cameraOptions.value}`);
     const constraints = {
       video: {
         ...videoConfig,
@@ -42,7 +44,7 @@ const startStream = async (constraints) => {
     const stream = await navigator.mediaDevices.getUserMedia(constraints);
     handleStream(stream);
   } catch (err) {
-    consoleOnDom("error", err.message);
+    doc.error(err.message)
   }
 };
 //output video on video element
@@ -60,23 +62,20 @@ cameraOptions.onchange = () => {
     if (window.stream)
       window.stream.getTracks().forEach((track) => track.stop());
     /*stop current camera stream here*/
-    consoleOnDom("msg", `requesting ${cameraOptions.value}`);
+    doc.log(`requesting ${cameraOptions.value}`);
     const constraints = {
       video: {
         ...videoConfig,
         facingMode:cameraOptions.value,
       },
     };
-    startStream(constraints);
+    startStream(constraints)
 
   } catch (err) {
-    consoleOnDom("error", err.message);
+    doc.error(err.message);
   }
 };
 
 //pause video
 const pauseStream = () => video.pause();
-
 pause.onclick = pauseStream;
-
-console.log(doc);

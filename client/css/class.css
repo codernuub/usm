@@ -29,8 +29,6 @@ body {
   overflow: hidden;
 }
 .lecture > video {
-  width: 100% !important;
-  height: auto !important;
   background-color: #eee;
 }
 
