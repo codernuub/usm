@@ -3,10 +3,15 @@ const video = document.querySelector("video");
 const cameraOptions = document.querySelector(".video-options>select");
 const buttons = [...document.querySelectorAll("button")];
 let streamStarted = false;
-console.log(video)
-const [play, pause, stop] = buttons;
 
+const [play, pause, stop] = buttons;
 const videoConfig = {
+
+  width: video.clientWidth,
+  height: video.clientHeight
+
+}
+const tempvideoConfig = {
   width: {
     min: 1280,
     ideal: 1920,
@@ -20,7 +25,7 @@ const videoConfig = {
 };
 
 play.onclick = () => {
-if (streamStarted) {
+  if (streamStarted) {
     video.play();
     return;
   }
@@ -64,7 +69,7 @@ cameraOptions.onchange = () => {
     const constraints = {
       video: {
         ...videoConfig,
-        facingMode:cameraOptions.value,
+        facingMode: cameraOptions.value,
       },
     };
     startStream(constraints)
