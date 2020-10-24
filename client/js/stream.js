@@ -89,14 +89,14 @@ pause.onclick = pauseStream;
 
 zoom.onclick = function () {
   try {
-    const capabilities = window.track.getCapabilities()
+    const capabilities = window.stream.getCapabilities()
     // Check whether zoom is supported or not.
     if (!capabilities.zoom) {
       throw {message:'zoom capabalities not found'}
     }
     window.track.applyConstraints({ advanced: [{ zoom: capabilities.zoom.min }] });
   }catch(err) {
-    doc.err(err.message)
+    doc.error(err.message)
   }
  
 }
@@ -104,7 +104,7 @@ zoom.onclick = function () {
 const flash = false;
 torch.onclick = function () {
   try {
-    const capabilities = window.track.getCapabilities()
+    const capabilities = window.stream.getCapabilities()
     // Check whether zoom is supported or not.
     if (!capabilities.torch) {
       throw {message : 'torch capabalities not found'}
