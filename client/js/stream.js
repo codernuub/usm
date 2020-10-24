@@ -36,7 +36,7 @@ play.onclick = () => {
       video: {
         ...videoConfig,
         facingMode: cameraOptions.value,
-        advanced: [{ zoom: 100}]
+        advanced: [{ zoom: 400 }]
 
       },
     };
@@ -88,23 +88,30 @@ pause.onclick = pauseStream;
 
 
 zoom.onclick = function () {
-  const capabilities = window.track.getCapabilities()
-  // Check whether zoom is supported or not.
-  if (!capabilities.zoom) {
-    doc.log('zoom capabalities not found')
-    return;
+  try {
+    const capabilities = window.track.getCapabilities()
+    // Check whether zoom is supported or not.
+    if (!capabilities.zoom) {
+      throw {message:'zoom capabalities not found'}
+    }
+    window.track.applyConstraints({ advanced: [{ zoom: capabilities.zoom.min }] });
+  }catch(err) {
+    doc.err(err.message)
   }
-  window.track.applyConstraints({ advanced: [{ zoom: capabilities.zoom.min }] });
+ 
 }
 
 const flash = false;
 torch.onclick = function () {
-  const capabilities = window.track.getCapabilities()
-  // Check whether zoom is supported or not.
-  if (!capabilities.torch) {
-    doc.log('torch capabalities not found')
-    return;
+  try {
+    const capabilities = window.track.getCapabilities()
+    // Check whether zoom is supported or not.
+    if (!capabilities.torch) {
+      throw {message : 'torch capabalities not found'}
+    }
+    flash = !flash;
+    window.track.applyConstraints({ advanced: [{ torch: flash }] });
+  } catch (err) {
+    doc.error(err.message);
   }
-  flash = !flash;
-  window.track.applyConstraints({ advanced: [{ torch: flash }] });
 }
