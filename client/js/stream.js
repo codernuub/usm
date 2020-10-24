@@ -102,7 +102,7 @@ zoom.onclick = function () {
  
 }
 
-const flash = false;
+let flash = false;
 torch.onclick = function () {
   try {
     const track = window.stream.getTracks()[0];
