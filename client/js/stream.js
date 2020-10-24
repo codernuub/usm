@@ -4,7 +4,8 @@ const cameraOptions = document.querySelector(".video-options>select");
 const buttons = [...document.querySelectorAll("button")];
 let streamStarted = false;
 
-const [play, pause, stop] = buttons;
+const [play, pause, zoom, torch] = buttons;
+
 const videoConfig = {
 
   width: video.clientWidth,
@@ -35,6 +36,8 @@ play.onclick = () => {
       video: {
         ...videoConfig,
         facingMode: cameraOptions.value,
+        advanced: [{ zoom: 100}]
+
       },
     };
     startStream(constraints);
@@ -50,7 +53,7 @@ const startStream = async (constraints) => {
     doc.error(err.message)
   }
 };
-//output video on video element
+//output video on video element 
 const handleStream = (stream) => {
   video.srcObject = stream;
   window.stream = stream;
@@ -82,3 +85,26 @@ cameraOptions.onchange = () => {
 //pause video
 const pauseStream = () => video.pause();
 pause.onclick = pauseStream;
+
+
+zoom.onclick = function () {
+  const capabilities = window.track.getCapabilities()
+  // Check whether zoom is supported or not.
+  if (!capabilities.zoom) {
+    doc.log('zoom capabalities not found')
+    return;
+  }
+  window.track.applyConstraints({ advanced: [{ zoom: capabilities.zoom.min }] });
+}
+
+const flash = false;
+torch.onclick = function () {
+  const capabilities = window.track.getCapabilities()
+  // Check whether zoom is supported or not.
+  if (!capabilities.torch) {
+    doc.log('torch capabalities not found')
+    return;
+  }
+  flash = !flash;
+  window.track.applyConstraints({ advanced: [{ torch: flash }] });
+}
