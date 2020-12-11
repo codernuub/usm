@@ -12,18 +12,6 @@ const videoConfig = {
   height: video.clientHeight
 
 }
-const tempvideoConfig = {
-  width: {
-    min: 1280,
-    ideal: 1920,
-    max: 2560,
-  },
-  height: {
-    min: 720,
-    ideal: 1080,
-    max: 1440,
-  },
-};
 
 play.onclick = () => {
   if (streamStarted) {
@@ -64,22 +52,28 @@ const handleStream = (stream) => {
 //camera change
 cameraOptions.onchange = () => {
   try {
-    /*stop current camera stream here*/
-    if (window.stream)
-      window.stream.getTracks().forEach((track) => track.stop());
-    /*stop current camera stream here*/
-    doc.log(`requesting ${cameraOptions.value}`);
-    const constraints = {
-      video: {
-        ...videoConfig,
-        facingMode: cameraOptions.value,
-      },
-    };
-    startStream(constraints)
-
+    const track = window.stream.getTracks()[0];
+    track.applyConstraints({ facingMode: cameraOptions.value });
   } catch (err) {
-    doc.error(err.message);
+    doc.error(err.message)
   }
+  /* try {
+    
+     if (window.stream)
+       window.stream.getTracks().forEach((track) => track.stop());
+    
+     doc.log(`requesting ${cameraOptions.value}`);
+     const constraints = {
+       video: {
+         ...videoConfig,
+         facingMode: cameraOptions.value,
+       },
+     };
+     startStream(constraints)
+ 
+   } catch (err) {
+     doc.error(err.message);
+   }*/
 };
 
 //pause video
@@ -93,13 +87,13 @@ zoom.onclick = function () {
     const capabilities = track.getCapabilities()
     // Check whether zoom is supported or not.
     if (!capabilities.zoom) {
-      throw {message:'zoom capabalities not found'}
+      throw { message: 'zoom capabalities not found' }
     }
     track.applyConstraints({ advanced: [{ zoom: capabilities.zoom.min }] });
-  }catch(err) {
+  } catch (err) {
     doc.error(err.message)
   }
- 
+
 }
 
 let flash = false;
@@ -109,7 +103,7 @@ torch.onclick = function () {
     const capabilities = track.getCapabilities();
     // Check whether zoom is supported or not.
     if (!capabilities.torch) {
-      throw {message : 'torch capabalities not found'}
+      throw { message: 'torch capabalities not found' }
     }
     flash = !flash;
     track.applyConstraints({ advanced: [{ torch: flash }] });
