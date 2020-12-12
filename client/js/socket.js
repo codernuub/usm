@@ -40,7 +40,7 @@ window.navigator.mediaDevices
       const video = getVideoEL();
       call.answer(stream);
       call.on("stream", (userStream) => {
-        console.log('adding video from line 43')
+        doc.log('adding video from line 43')
         addVideoToStream(video, userStream);
       });
       call.on('close', ()=> video.remove());
@@ -57,10 +57,10 @@ function callNewUser(userId, stream) {
   //when user respond with own stream
   const userVideo = getVideoEL();
   //when user respond with our stream
-  call.on("stream", (userStream) => {
-    console.log('adding video from line 54 : callNewUser:func')
+  /*call.on("stream", (userStream) => {
+    doc.log('adding video from line 54 : callNewUser:func')
     addVideoToStream(getVideoEL(), userStream);
-  });
+  });*/
   call.on("close", () => userVideo.remove());
   call.on("error", (err) => doc.error(err));
   peers[userId] = call;
