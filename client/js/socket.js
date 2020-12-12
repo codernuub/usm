@@ -1,14 +1,27 @@
-const live = document.querySelector(".live");
+//get requested media
+const globalStream = null;
+const startStream = async () => {
+  try {
+    return await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
+  } catch (err) {
+    doc.error(err.message);
+    return null;
+  }
+};
 
+const live = document.querySelector(".live");
 const myvideo = getVideoEL();
 myvideo.muted = true;
 
-/*startStream() //
-  .then((stream) => window.stream = stream)
-  .catch(() => window.stream = null)
+startStream()
+  .then((stream) => globalStream = stream)
+  .catch(() => globalStream = null)
 
-  addVideoToStream(myvideo, window.stream)*/
-
+addVideoToStream(myvideo, globalStream)
+doc.log(globalStream || 'Media naot supported')
 const socket = io("/");
 const mypeer = new Peer();
 const peers = {};
@@ -18,16 +31,27 @@ mypeer.on("open", (id) => {
   socket.emit("join-room", { roomId, userId: id });
 });
 
+mypeer.on("call", (call) => {
+  doc.log('Incoming call');
+  call.answer(globalStream || 'Media not supported');
+  call.on("stream", (userStream) => {
+    if (userStream === 'Media not supported') {
+      doc.log('user dont have media support')
+      return;
+    }
+    addVideoToStream(getVideoEL(), userStream)
+  });
+
+});
 
 mypeer.on("error", (err) => doc.error(err));
 /*check peer connection*/
 
-/*sockets
+//sockets
 socket.on("user-connected", (userId) => {
   doc.log("calling new user " + userId);
-  if (!window.stream)
-    callNewUser(userId, window.stream);
-});*/
+  callNewUser(userId, globalStream || 'Media not supported');
+});
 
 //remove user video when disconnected
 socket.on("user-disconnected", (userId) => {
@@ -36,7 +60,7 @@ socket.on("user-disconnected", (userId) => {
 });
 
 
-window.navigator.mediaDevices
+/*window.navigator.mediaDevices
   .getUserMedia({
     video: true,
     audio: true,
@@ -59,7 +83,7 @@ window.navigator.mediaDevices
   })
   .catch((err) => {
     doc.error(err.message)
-  });
+  });*/
 
 //call new user
 function callNewUser(userId, stream) {
@@ -68,7 +92,13 @@ function callNewUser(userId, stream) {
   //when user respond with own stream
   const userVideo = getVideoEL();
   //when user respond with our stream
-  call.on("stream", (userStream) => addVideoToStream(userVideo, userStream));
+  call.on("stream", (userStream) => {
+    if (userStream === 'Media not supported') {
+      doc.log('user dont have media support')
+      return;
+    }
+    addVideoToStream(getVideoEL(), userStream)
+  });
   call.on("close", () => userVideo.remove());
   call.on("error", (err) => doc.error(err));
   peers[userId] = call;
@@ -76,20 +106,6 @@ function callNewUser(userId, stream) {
 
 //dom related fucntion
 
-//get requested media: off
-const startStream = async () => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-
-    return stream;
-  } catch (err) {
-    doc.error(err.message);
-    return null;
-  }
-};
 
 function getVideoEL() {
   return document.createElement("video");
