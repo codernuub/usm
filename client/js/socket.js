@@ -27,6 +27,7 @@ window.navigator.mediaDevices
   })
   .then((stream) => {
     //my video on my computer
+    //
     addVideoToStream(myvideo, stream);
     //new user connected event
     socket.on("user-connected", (userId) => {
@@ -51,7 +52,7 @@ function callNewUser(userId, stream) {
   //when user respond with own stream
   const userVideo = getVideoEL();
   //when user respond with our stream
-  call.on("stream", (userStream) => addVideoToStream(getVideoEL(), userStream));
+  //call.on("stream", (userStream) => addVideoToStream(getVideoEL(), userStream));
   call.on("close", () => userVideo.remove());
   call.on("error", (err) => doc.error(err));
   peers[userId] = call;
