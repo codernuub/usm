@@ -37,8 +37,10 @@ window.navigator.mediaDevices
    
     mypeer.on("call", (call) => {
       doc.log('Incoming call')
+      const video = getVideoEL();
       call.answer(stream);
-      call.on("stream", (userStream) => addVideoToStream(getVideoEL(), userStream));
+      call.on("stream", (userStream) => addVideoToStream(video, userStream));
+      call.on('close', ()=> video.remove());
     });
   })
   .catch((err) => {
@@ -52,10 +54,11 @@ function callNewUser(userId, stream) {
   //when user respond with own stream
   const userVideo = getVideoEL();
   //when user respond with our stream
-  //call.on("stream", (userStream) => addVideoToStream(getVideoEL(), userStream));
+  call.on("stream", (userStream) => addVideoToStream(getVideoEL(), userStream));
   call.on("close", () => userVideo.remove());
   call.on("error", (err) => doc.error(err));
   peers[userId] = call;
+  doc.log(peers);
 }
 
 //dom related fucntion
