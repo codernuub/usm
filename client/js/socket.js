@@ -1,13 +1,14 @@
 const live = document.querySelector(".live");
-window.addEventListener('DOMContentLoaded', () => {
-  const myvideo = getVideoEL();
-  myvideo.muted = true;
-  startStream()
-    .then((stream) => window.stream = stream)
-    .catch(() => window.stream = null)
-    addVideoToStream(myvideo, window.stream)
 
-})
+const myvideo = getVideoEL();
+myvideo.muted = true;
+
+/*startStream() //
+  .then((stream) => window.stream = stream)
+  .catch(() => window.stream = null)
+
+  addVideoToStream(myvideo, window.stream)*/
+
 const socket = io("/");
 const mypeer = new Peer();
 const peers = {};
@@ -17,22 +18,16 @@ mypeer.on("open", (id) => {
   socket.emit("join-room", { roomId, userId: id });
 });
 
-mypeer.on("call", (call) => {
-  doc.log('Incoming call');
-  call.answer(window.stream);
-  call.on("stream", (userStream) => addVideoToStream(getVideoEL(), userStream));
-  call.on("error", (err) => doc.error(err))
-});
 
 mypeer.on("error", (err) => doc.error(err));
 /*check peer connection*/
 
-/*sockets*/
+/*sockets
 socket.on("user-connected", (userId) => {
   doc.log("calling new user " + userId);
   if (!window.stream)
     callNewUser(userId, window.stream);
-});
+});*/
 
 //remove user video when disconnected
 socket.on("user-disconnected", (userId) => {
@@ -41,7 +36,7 @@ socket.on("user-disconnected", (userId) => {
 });
 
 
-/*window.navigator.mediaDevices
+window.navigator.mediaDevices
   .getUserMedia({
     video: true,
     audio: true,
@@ -52,12 +47,11 @@ socket.on("user-disconnected", (userId) => {
     //new user connected event
     socket.on("user-connected", (userId) => {
       doc.log("user-connected " + userId);
-      connectToNewUser(userId, stream);
+      callNewUser(userId, stream);
     });
-    //when new call comes : user call with own stream
+   
     mypeer.on("call", (call) => {
-      call.answer(stream); //respond with my own stream
-      //take user stream and append in body
+      call.answer(stream);
       call.on("stream", (userStream) =>
         addVideoToStream(getVideoEL(), userStream)
       );
@@ -65,7 +59,7 @@ socket.on("user-disconnected", (userId) => {
   })
   .catch((err) => {
     doc.error(err.message)
-  });*/
+  });
 
 //call new user
 function callNewUser(userId, stream) {
@@ -82,14 +76,14 @@ function callNewUser(userId, stream) {
 
 //dom related fucntion
 
-//get requested media
+//get requested media: off
 const startStream = async () => {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
     });
-    
+
     return stream;
   } catch (err) {
     doc.error(err.message);
