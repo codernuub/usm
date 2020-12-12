@@ -7,10 +7,8 @@ let streamStarted = false;
 const [play, pause, zoom, torch] = buttons;
 
 const videoConfig = {
-
   width: video.clientWidth,
   height: video.clientHeight
-
 }
 
 play.onclick = () => {
