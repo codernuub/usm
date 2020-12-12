@@ -8,10 +8,9 @@ try {
   mypeer.on('error', (err) => doc.error(err));
 
   /*check peer connection*/
-  const live = document.querySelector(".lecture");
+  const live = document.querySelector(".live");
   const myvideo = getVideoEL();
   myvideo.muted = true;
-
   window.navigator.mediaDevices
     .getUserMedia({
       video: true,
@@ -21,7 +20,10 @@ try {
       //my video on my computer
       addVideoToStream(myvideo, stream);
       //new user connected event
-      socket.on("user-connected", (userId) => connectToNewUser(userId, stream));
+      socket.on("user-connected", (userId) =>{
+        doc.log("user-connected " + userId)
+        connectToNewUser(userId, stream)
+      });
       //when new call comes : user call with own stream
       mypeer.on("call", (call) => {
         call.answer(stream); //respond with my own stream
