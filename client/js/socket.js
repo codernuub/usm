@@ -17,7 +17,7 @@ mypeer.on("error", (err) => doc.error(err));
 //remove user video when disconnected
 socket.on("user-disconnected", (userId) => {
   doc.log("user-disconnected " + userId);
-  peers[userId].close();
+  if(peers[userId]) peers[userId].close();
 });
 
 window.navigator.mediaDevices
@@ -34,17 +34,18 @@ window.navigator.mediaDevices
       doc.log("user-connected " + userId);
       callNewUser(userId, stream);
     });
-   
+
     mypeer.on("call", (call) => {
       doc.log('Incoming call')
-      const video = getVideoEL();
+      const userVideo = getVideoEL();
       call.answer(stream);
       call.on("stream", (userStream) => {
         doc.log('adding video from line 43')
-        addVideoToStream(video, userStream);
+        addVideoToStream(userVideo, userStream);
       });
-      call.on('close', ()=> video.remove());
+      call.on('close', () => userVideo.remove());
     });
+
   })
   .catch((err) => {
     doc.error(err.message);
@@ -53,18 +54,14 @@ window.navigator.mediaDevices
 //call new user
 function callNewUser(userId, stream) {
   //call new user with userId & stream
-  const call = mypeer.call(userId, stream);
-  //when user respond with own stream
   const userVideo = getVideoEL();
-  //when user respond with our stream
-  /*call.on("stream", (userStream) => {
-    doc.log('adding video from line 54 : callNewUser:func')
-    addVideoToStream(getVideoEL(), userStream);
-  });*/
-  call.on("close", () => userVideo.remove());
-  call.on("error", (err) => doc.error(err));
+  mypeer.call(userId, stream)
+    .on("stream", (userStream) => {
+      doc.log('adding video from line 54 : callNewUser:func')
+      addVideoToStream(userVideo, userStream);
+    })
+    .on("close", () => userVideo.remove())
   peers[userId] = call;
-  doc.log(peers);
 }
 
 //dom related fucntion
