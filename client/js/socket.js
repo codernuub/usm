@@ -3,10 +3,10 @@ window.addEventListener('DOMContentLoaded', () => {
   const myvideo = getVideoEL();
   myvideo.muted = true;
   startStream()
-    .then(() => window.stream = stream)
+    .then((stream) => window.stream = stream)
     .catch(() => window.stream = null)
+    addVideoToStream(myvideo, window.stream)
 
-  addVideoToStream(myvideo, window.stream)
 })
 const socket = io("/");
 const mypeer = new Peer();
@@ -30,12 +30,13 @@ mypeer.on("error", (err) => doc.error(err));
 /*sockets*/
 socket.on("user-connected", (userId) => {
   doc.log("calling new user " + userId);
-  callNewUser(userId, window.stream);
+  if (!window.stream)
+    callNewUser(userId, window.stream);
 });
 
 //remove user video when disconnected
 socket.on("user-disconnected", (userId) => {
-  console.log("user-disconnected " + userId);
+  doc.log("user-disconnected " + userId);
   peers[userId].close();
 });
 
@@ -88,6 +89,7 @@ const startStream = async () => {
       video: true,
       audio: true,
     });
+    
     return stream;
   } catch (err) {
     doc.error(err.message);
@@ -101,10 +103,10 @@ function getVideoEL() {
 
 function addVideoToStream(video, stream) {
   try {
-    if(!stream) {
+    if (!stream) {
       video.className = 'no-video';
-     // video.title = "Media not sideo.title = "Media not suppoted"uppideo.title = "Media not suppoted"oted"
-    }else{
+      // video.title = "Media not sideo.title = "Media not suppoted"uppideo.title = "Media not suppoted"oted"
+    } else {
       video.srcObject = stream;
       video.addEventListener("loadedmetadata", () => video.play());
     }
